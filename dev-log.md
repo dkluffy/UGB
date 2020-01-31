@@ -2,11 +2,12 @@
 
 ## TimeLine
 
-- 2020/01/31 已经实现了大部分训练功能
-  - tensorboard
-  - save_weights,load_model,checkpoints，scheduler，。。。
-  - 用dataset大大简化了数据生成问题
-  - 训练了50 epoch,loss change from 2.1244 to 1.0398
+### 2020/01/31 已经实现了大部分训练功能
+
+- tensorboard
+- save_weights,load_model,checkpoints，scheduler，。。。
+- 用dataset大大简化了数据生成问题
+- 训练了50 epoch,loss change from 2.1244 to 1.0398
 
 ```python
 100/100 [==============================] - 86s 861ms/step - loss: 1.0488
@@ -66,22 +67,17 @@ loss可能卡在1附近不动了， 用较大的LR和极小LR测试，LOSS都没
 - 本地验证(todo)
 - 生成vector和meta，导入https://projector.tensorflow.org/ (UMAP)
 
-#### 结果
-
-- 用lr=0.0001训练15 epoch，loss就几乎接近于0
-- loss接近于0的情况下，模型结果完全没有区分 T 和 noise,尽管T的聚类结果很好
-
-#### 改进
-
-- [ ] 用随机生成的noise代替随机截图
-- [ ] 验证的时候,尽可能多的编码t（中心可点击）
-- [ ] 编写metric检测，把随机截图和T放入验证集
+**----------**
 
 ### 分块对比法-classification
+
+**----------**
 
 ### 分块对比法-GAN
 
 用GAN的方法，可以同时得到G和D，值得一试
+
+**----------**
 
 ### FCN
 
