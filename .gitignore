@@ -1,3 +1,6 @@
+# local files
+v2_softmax/data/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

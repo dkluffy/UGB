@@ -2,12 +2,11 @@
 
 ## TimeLine
 
-### 2020/01/31 已经实现了大部分训练功能
-
-- tensorboard
-- save_weights,load_model,checkpoints，scheduler，。。。
-- 用dataset大大简化了数据生成问题
-- 训练了50 epoch,loss change from 2.1244 to 1.0398
+* 2020/01/31 已经实现了大部分训练功能
+    + tensorboard
+    + save_weights,load_model,checkpoints，scheduler，。。。
+    + 用dataset大大简化了数据生成问题
+    + 训练了50 epoch,loss change from 2.1244 to 1.0398
 
 ```python
 100/100 [==============================] - 86s 861ms/step - loss: 1.0488
