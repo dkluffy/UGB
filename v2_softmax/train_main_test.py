@@ -73,7 +73,6 @@ def load_model(weights_filename=None,lr=None):
        model.load_weights(weights_filename)
     model.compile(optimizer,loss,metrics=['accuracy'])
 
-
     return model
 
 def train(model,initial_epoch=1,batch_size=16,
@@ -83,16 +82,17 @@ def train(model,initial_epoch=1,batch_size=16,
     # load data
     images,labels = fetch_image_label(targets_dir)
     target_ds = create_dataset(images,labels)
-
-    X_train = DataGenerator(target_ds,batch_size=batch_size,steps_per_epoch=steps_per_epoch)
+    #X_train = DataGenerator(target_ds,batch_size=batch_size,steps_per_epoch=steps_per_epoch)
+    X_train = target_ds.batch(batch_size)
 
     val_ds = create_dataset(images,labels)
-    X_val = DataGenerator(val_ds,batch_size=batch_size,steps_per_epoch=10)
+    #X_val = DataGenerator(val_ds,batch_size=batch_size,steps_per_epoch=10)
+    X_val = val_ds.batch(batch_size)
 
     # write image ds example to tb
-    for i in range(10):
-        img_for_view,_  = X_train[i]
-        write_images_tb(img_for_view)
+    # for i in range(10):
+    #     img_for_view,_  = X_train[i]
+    #     write_images_tb(img_for_view)
 
     #fire...
     history = model.fit(X_train,
@@ -115,5 +115,5 @@ if __name__ == "__main__":
     except:
       pass
 
-    model = load_model()
-    history = train(model,initial_epoch=0,epoch_num=50)
+    model = load_model("data\\weights\\model_checkpoit_weights_only.20200202_1935.130.ckpt")
+    history = train(model,initial_epoch=130,epoch_num=150)
