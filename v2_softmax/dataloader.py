@@ -6,12 +6,12 @@ import numpy as np
 
 from tensorflow.keras.utils import Sequence
 
-import base_cfg
+import baseconf
 
 class DataGenerator(Sequence):
     def __init__(self,
                 targets_ds,
-                noise_ds,
+                noise_ds=None,
                 t_size=128,
                 batch_size=16,
                 noise_rate=0.2,
@@ -31,36 +31,40 @@ class DataGenerator(Sequence):
         return self.steps_per_epoch
     
     def __getitem__(self,idx):
-        targets_xy = list(self.targets_ds.take(self.target_batch_size))        
-        noise_xy = list(self.noise_ds.take(self.noise_batch_size)) 
+        targets_xy = list(self.targets_ds.take(self.target_batch_size)) 
+        noise_xy = []
+        if self.noise_ds:
+            noise_xy = list(self.noise_ds.take(self.noise_batch_size)) 
         xy = targets_xy+noise_xy
         random.shuffle(xy)
         x,y = zip(*xy)
         return tf.convert_to_tensor(x),tf.convert_to_tensor(y)
 
-class DataGeneratorRandomNoise(DataGenerator):
-    """
-    =。= 感觉这个轮子又白造了，随机的noise可能没用
-    """
-    def __init__(self,
-                targets_ds,
-                t_size=128,
-                batch_size=16,
-                noise_rate=0.5,
-                steps_per_epoch=100):
-        super.__init__(self)
+
+# class DataGeneratorRandomNoise(DataGenerator):
+#     """
+#     =。= 感觉这个轮子又白造了，随机的noise可能没用
+#     """
+#     def __init__(self,
+#                 targets_ds,
+#                 t_size=128,
+#                 batch_size=16,
+#                 noise_rate=0.5,
+#                 steps_per_epoch=100):
+#         super.__init__(self)
     
-    def __getitem__(self,idx):
-        targets_xy = list(self.targets_ds.take(self.target_batch_size))
+#     def __getitem__(self,idx):
+#         targets_xy = list(self.targets_ds.take(self.target_batch_size))
         
-        noise_x = tf.random.uniform(shape=self.codings_size,dtype=tf.float32)
-        noise_y = tf.constant([0.]*self.noise_batch_size)
-        noise_xy = list(zip(noise_x,noise_y))
+#         noise_x = tf.random.uniform(shape=self.codings_size,dtype=tf.float32)
+#         noise_y = tf.constant([0.]*self.noise_batch_size)
+#         noise_xy = list(zip(noise_x,noise_y))
 
-        xy = targets_xy+noise_xy
-        random.shuffle(xy)
-        x,y = zip(*xy)
-        return tf.convert_to_tensor(x),tf.convert_to_tensor(y)
+#         xy = targets_xy+noise_xy
+#         random.shuffle(xy)
+#         x,y = zip(*xy)
+#         return tf.convert_to_tensor(x),tf.convert_to_tensor(y)
+
 
 from functools import partial
 
@@ -72,7 +76,10 @@ resizer = partial(tf.image.resize_with_pad,
 # tf.image.random_jpeg_quality,tf.image.rot90
 # skimage.transform.rescale
 
-def im_random_rescale(image,ratio=None,t_size=base_cfg.TARGET_SIZE):
+def im_random_rescale(image,ratio=None,t_size=baseconf.TARGET_SIZE):
+    """
+    BUG:tf.image.resize不能处理batch，必须放在tf.image.random_crop之后
+    """
     if ratio is None:
         ratio = tf.random.uniform(())*2
     else:
@@ -84,11 +91,10 @@ def im_random_rescale(image,ratio=None,t_size=base_cfg.TARGET_SIZE):
     return image
 
 def preprocess_image(image):
-    image = tf.image.random_crop(image,base_cfg.TARGET_SHAPE)
-    #image /= 255.0  # normalize to [0,1] range
     #image -= np.mean(image,keepdims=True)
+    image = tf.image.random_crop(image,baseconf.TARGET_SHAPE)
     if tf.random.uniform(()) > 0.5:
-        return im_random_rescale(image,base_cfg.RESCAL_RATIO)
+        return im_random_rescale(image,baseconf.RESCAL_RATIO)
     return image
 
 def load_and_preprocess_image(path):
@@ -99,6 +105,8 @@ def load_and_preprocess_image(path):
 def load_image(path):
     image = tf.io.read_file(path)
     image = tf.image.decode_image(image,channels=3,dtype=tf.float32)
+    #image = tf.image.decode_jpeg(image,channels=3)
+    #image /= 255.0
     return image
 
 def create_dataset(images,lables,buffer_size=100):
@@ -134,12 +142,15 @@ def fetch_image_label(fdir,fix_lable=None):
     if fix_lable is not None:
         labels = [fix_lable] * len(file_names)
     else:
-        labels = [ int(x.split(".")[0])*1.0 for x in file_names ]
+        labels = [ int(x.split(".")[0]) for x in file_names ]
 
     return image_paths,labels
 
 ######################################
 
-
+if __name__ =="__main__":
+    im = load_image("data\\targets\\1.0.jpeg")
+    im = im_random_rescale(im,baseconf.RESCAL_RATIO)
+    print(im.shape)
 
 

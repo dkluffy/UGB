@@ -1,6 +1,7 @@
 # local files
 v2_softmax/data/
-
+*.h5
+*.ckpt
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
