@@ -2,6 +2,10 @@
 
 ## TimeLine
 
+* 2020/02/02 不使用mobilenet，决定重新写一个，先测试gan
+    + [GAN，类似问题](https://blog.csdn.net/think_three/article/details/88714237)
+    + [2-channel，可以参考](https://blog.csdn.net/hjimce/article/details/50098483)
+
 * 2020/02/02 测试了softmax
     准确率大概只有0.6
 * 2020/01/31 已经实现了大部分训练功能
