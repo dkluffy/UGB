@@ -5,7 +5,7 @@ import tensorflow as tf
 import numpy as np
 from datetime import datetime
 
-from dataloader import DataGenerator,fetch_image_label,create_dataset
+from dataloader import fetch_image_label,create_dataset
 import baseconf as bcf
 
 
@@ -18,7 +18,7 @@ noise_dir = "data\\noise"
 
 #tb callback
 run_logdir = "data\\tb_logs"
-tensorboard_cb = tf.keras.callbacks.TensorBoard(run_logdir,write_images=True,histogram_freq=5)
+tensorboard_cb = tf.keras.callbacks.TensorBoard(run_logdir,histogram_freq=5)
 logdir = os.path.join(run_logdir,"scalars" , datetime.now().strftime("%Y%m%d-%H%M%S") )
 
 # lr callback
@@ -45,9 +45,9 @@ checkpoint_cb = tf.keras.callbacks.ModelCheckpoint(chkfilename,save_weights_only
 # viz for images
 def write_images_tb(images):
     # Sets up a timestamped log directory.
-    logdir = os.path.join(run_logdir,"train_data",datetime.now().strftime("%Y%m%d-%H%M%S"))
+    img_logdir = os.path.join(run_logdir,"train_data",datetime.now().strftime("%Y%m%d-%H%M%S"))
     # Creates a file writer for the log directory.
-    file_writer = tf.summary.create_file_writer(logdir)
+    file_writer = tf.summary.create_file_writer(img_logdir)
     with file_writer.as_default():
       tf.summary.image("batch of training data examples", images, max_outputs=100,step=0)
 
@@ -69,7 +69,7 @@ def load_model(weights_filename=None,lr=None):
     optimizer = tf.keras.optimizers.SGD(learning_rate=lr,momentum=0.8)
     #optimizer = tf.keras.optimizers.Adam(learning_rate=lr)
 
-    if weights_filename:
+    if os.path.exists(weights_filename):
        model.load_weights(weights_filename)
     model.compile(optimizer,loss,metrics=['accuracy'])
 
@@ -115,5 +115,5 @@ if __name__ == "__main__":
     except:
       pass
 
-    model = load_model("data\\weights\\model_checkpoit_weights_only.20200202_1935.130.ckpt")
+    model = load_model("data\\weights\\model_disc_only.ckpt")
     history = train(model,initial_epoch=130,epoch_num=150)
