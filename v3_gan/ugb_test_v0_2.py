@@ -28,14 +28,26 @@ import baseconf as bcf
 ###################HParams##############################
 BATCH_SIZE=16
 noise_dim=512
-learning_rate=1e-4
+base_learning_rate=1e-4
 save_interval=5
 # Optimizers
 # generator_optimizer = tf.keras.optimizers.Adam(2e-4, beta_1=0.5)
 # discriminator_optimizer = tf.keras.optimizers.Adam(2e-4, beta_1=0.5)
 
-generator_optimizer = tf.keras.optimizers.Adam(learning_rate)
-discriminator_optimizer = tf.keras.optimizers.Adam(learning_rate)
+generator_optimizer = tf.keras.optimizers.Adam()
+discriminator_optimizer = tf.keras.optimizers.Adam()
+# lr callback
+def lr_scheduler(epoch):
+  learning_rate = base_learning_rate
+  if epoch > 10:
+    learning_rate =base_learning_rate/2
+  if epoch > 20:
+    learning_rate = base_learning_rate/10
+  if epoch > 30:
+    learning_rate = base_learning_rate * tf.math.exp(0.1 * (10 - epoch))
+  #for tensorboard
+  tf.summary.scalar('learning rate', data=learning_rate, step=epoch)
+  return learning_rate
 
 LAMBDA = 10
 
@@ -96,7 +108,7 @@ def train_step(target, epoch):
                                           generator.trainable_variables)
   discriminator_gradients = disc_tape.gradient(disc_loss,
                                                discriminator.trainable_variables)
-
+  
   generator_optimizer.apply_gradients(zip(generator_gradients,
                                           generator.trainable_variables))
   discriminator_optimizer.apply_gradients(zip(discriminator_gradients,
@@ -123,7 +135,7 @@ def eveluator(targets_img,noise_img):
   ev_loss = mse(tf.zeros_like(result),result)
   return ev_loss
 
-def train(X_train,X_val,epochs,steps_per_epoch=100,val_steps=10):
+def train(X_train,X_val,epochs,init_epoch=1,steps_per_epoch=100,val_steps=10):
   """
   X_train - ds: 只包含目标图片
   X_val - ds: 只包含noise
@@ -135,14 +147,17 @@ def train(X_train,X_val,epochs,steps_per_epoch=100,val_steps=10):
     print("Initializing from scratch.")
   
   print("Fire to Train....")
-  for epoch in range(epochs):
+  for epoch in range(init_epoch,epochs):
     
     start = time.time()
-    
-    for step in range(steps_per_epoch):
+
+    generator_optimizer = tf.keras.optimizers.Adam(lr_scheduler(epoch))
+    discriminator_optimizer = tf.keras.optimizers.Adam(lr_scheduler(epoch))
+
+    for step in range(1,steps_per_epoch):
       for image_batch,_ in X_train.take(1):
         gen_loss,disc_loss = train_step(image_batch,epoch)
-        if (step+1) % 50 == 0:
+        if step % 50 == 0:
           print( "EPOCH-[%s/%s]- GEN LOSS:%.4f , DISC LOSS:%.4f (%s/%s) " % \
                     (epoch,epochs,gen_loss,disc_loss,step,steps_per_epoch))
 
@@ -162,7 +177,7 @@ def train(X_train,X_val,epochs,steps_per_epoch=100,val_steps=10):
 
 
     # 保存一次模型
-    if (epoch + 1) % save_interval == 0:
+    if epoch % save_interval == 0:
       save_path = ckpt_manager.save()
       print("Saved checkpoint for epoch {}: {}".format(epoch, save_path))
       # chkfilename = "gan_checkpoints" \
@@ -187,7 +202,7 @@ X_val = create_dataset(val_imgs,val_labels).batch(BATCH_SIZE)
 write_images_ds(X_train,"train",summary_writer)
 write_images_ds(X_val,"val",summary_writer)
 
-train(X_train,X_val,151)
+train(X_train,X_val,151,50)
 
 !cd /content/drive/My\ Drive
 

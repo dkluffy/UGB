@@ -40,6 +40,8 @@ def make_discriminator_model():
     last = layers.Dense(1,activation='sigmoid')(x)
   
     return tf.keras.Model(inputs=[inp, tar], outputs=last)
+
+    
 def upsample(filters, size, apply_dropout=False):
     initializer = tf.random_normal_initializer(0., 0.02)
   
