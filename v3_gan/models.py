@@ -36,7 +36,8 @@ def make_discriminator_model():
     x = downsample(128, 4)(x) 
     x = downsample(256, 4)(x)
     x = downsample(512, 1,True,False)(x)
-    last = layers.Dense(512,activation='sigmoid')(x)
+    x = layers.Dense(512,activation='selu')(x)
+    last = layers.Dense(1,activation='sigmoid')(x)
   
     return tf.keras.Model(inputs=[inp, tar], outputs=last)
 def upsample(filters, size, apply_dropout=False):
@@ -83,10 +84,10 @@ def make_generator_model():
     x = last(x)
     return tf.keras.Model(inputs=inputs, outputs=x)
     
-if __name__ == "__main__":
+# if __name__ == "__main__":
 
-    import baseconf
+#     import baseconf
 
-    model = make_discriminator_model()
-    model.summary()
-    model.save(baseconf.BASE_MODEL_FILENAME)
+#     model = make_discriminator_model()
+#     model.summary()
+#     model.save(baseconf.BASE_MODEL_FILENAME)

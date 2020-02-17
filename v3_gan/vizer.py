@@ -1,28 +1,16 @@
 import matplotlib.pyplot as plt
-    
+import numpy as np     
     #import matplotlib as mpl
     #mpl.rcParams['figure.figsize'] = (8, 6)
     #mpl.rcParams['axes.grid'] = False
 
-def viz_history(history,num_epoches=10):
-    acc = history.history['accuracy']
-    val_acc = history.history['val_accuracy']
-    
-    loss = history.history['loss']
-    val_loss = history.history['val_loss']
-    
-    epochs_range = range(num_epoches)
-    
-    plt.figure(figsize=(8, 8))
-    plt.subplot(1, 2, 1)
-    plt.plot(epochs_range, acc, label='Training Accuracy')
-    plt.plot(epochs_range, val_acc, label='Validation Accuracy')
-    plt.legend(loc='lower right')
-    plt.title('Training and Validation Accuracy')
-    
-    plt.subplot(1, 2, 2)
-    plt.plot(epochs_range, loss, label='Training Loss')
-    plt.plot(epochs_range, val_loss, label='Validation Loss')
-    plt.legend(loc='upper right')
-    plt.title('Training and Validation Loss')
-    plt.show()
+def plot_multiple_images(images, n_cols=None):
+    n_cols = n_cols or len(images)
+    n_rows = (len(images) - 1) // n_cols + 1
+    if images.shape[-1] == 1:
+        images = np.squeeze(images, axis=-1)
+    plt.figure(figsize=(n_cols, n_rows))
+    for index, image in enumerate(images):
+        plt.subplot(n_rows, n_cols, index + 1)
+        plt.imshow(image, cmap="binary")
+        plt.axis("off")

@@ -9,8 +9,10 @@ import baseconf
 
 from functools import partial
 
-resizer = partial(tf.image.resize_with_pad,
+resize_with_pad = partial(tf.image.resize_with_pad,
                     method=tf.image.ResizeMethod.NEAREST_NEIGHBOR) 
+
+AUTOTUNE = tf.data.experimental.AUTOTUNE
 
 def im_random_rescale(image,ratio=None,t_size=baseconf.TARGET_SIZE):
     """
@@ -26,13 +28,32 @@ def im_random_rescale(image,ratio=None,t_size=baseconf.TARGET_SIZE):
 
     return image
 
-def preprocess_image(image):
+
+def im_rescale(image,ratio=None,t_size=baseconf.TARGET_SIZE):
+    """
+    ratio - 数组
+    return:
+        images list
+    """
+    im_list = []
+    for rt in ratio:
+        ns = int(t_size*rt)
+        tmp_im = image
+        tmp_im = tf.image.resize(tmp_im,[ns,ns])
+        tmp_im = tf.image.resize_with_crop_or_pad(tmp_im,t_size,t_size)
+        im_list.append(tmp_im)
+    return im_list
+
+def preprocess_image_with_scale(image):
     #image -= np.mean(image,keepdims=True)
     image = tf.image.random_crop(image,baseconf.TARGET_SHAPE)
     if tf.random.uniform(()) > 0.5:
         return im_random_rescale(image,baseconf.RESCAL_RATIO)
     return image
 
+def preprocess_image(image):
+    return tf.image.random_crop(image,baseconf.TARGET_SHAPE)
+    
 def load_and_preprocess_image(path):
     image = tf.io.read_file(path)
     image = tf.image.decode_image(image,channels=3,dtype=tf.float32)
@@ -41,18 +62,45 @@ def load_and_preprocess_image(path):
 def load_image(path):
     image = tf.io.read_file(path)
     image = tf.image.decode_image(image,channels=3,dtype=tf.float32)
-    #image = tf.image.decode_jpeg(image,channels=3)
-    #image /= 255.0
     return image
 
-def create_dataset(images,lables,buffer_size=100):
+def load_test_image(path):
+    image = tf.io.read_file(path)
+    image = tf.image.decode_image(image,channels=3,dtype=tf.float32)
+    return resize_with_pad(image,baseconf.TARGET_SIZE,baseconf.TARGET_SIZE)
 
-    AUTOTUNE = tf.data.experimental.AUTOTUNE
+def create_dataset(images,lables,im_loader=load_and_preprocess_image,buffer_size=128):
     path_ds = tf.data.Dataset.from_tensor_slices(images)
-    image_ds = path_ds.map(load_and_preprocess_image, num_parallel_calls=AUTOTUNE)
+    image_ds = path_ds.map(im_loader, num_parallel_calls=AUTOTUNE)
     label_ds = tf.data.Dataset.from_tensor_slices(lables)
     img_lab_ds = tf.data.Dataset.zip((image_ds, label_ds))
-    return img_lab_ds.repeat().shuffle(buffer_size=buffer_size)
+    return img_lab_ds.shuffle(buffer_size=buffer_size).repeat()
+
+def create_dataset_in_mem(images,lables,buffer_size=128):
+    ratio = baseconf.RESCAL_RATIO
+    m_size=baseconf.MID_SIZE
+    
+    copys_len = len(ratio)+1
+    
+    img_list = []
+    for im in images:
+        im = load_image(im)
+        tmp_list=im_rescale(im,ratio=ratio,t_size=m_size)
+        tmp_list.append(resize_with_pad(im,m_size,m_size))
+        img_list+=tmp_list
+
+    new_lables = []
+    for lb in lables:
+        new_lables+=[lb]*copys_len
+
+    #assert len(img_list) == len(new_lables),"img_list,new_lables is not match!"
+
+    image_ds = tf.data.Dataset.from_tensor_slices(img_list)
+    label_ds = tf.data.Dataset.from_tensor_slices(new_lables)
+
+    image_ds = image_ds.map(preprocess_image, num_parallel_calls=AUTOTUNE)
+    img_lab_ds = tf.data.Dataset.zip((image_ds, label_ds))
+    return img_lab_ds.shuffle(buffer_size=buffer_size).repeat()
 
 import os
 

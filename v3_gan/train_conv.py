@@ -43,13 +43,13 @@ chkfilename = "data\\weights\\model_checkpoit_weights_only" \
 checkpoint_cb = tf.keras.callbacks.ModelCheckpoint(chkfilename,save_weights_only=True,period=10)
 
 # viz for images
-def write_images_tb(images):
+def write_images_tb(images,summary_writer):
     # Sets up a timestamped log directory.
     img_logdir = os.path.join(run_logdir,"train_data",datetime.now().strftime("%Y%m%d-%H%M%S"))
     # Creates a file writer for the log directory.
     file_writer = tf.summary.create_file_writer(img_logdir)
-    with file_writer.as_default():
-      tf.summary.image("batch of training data examples", images, max_outputs=100,step=0)
+    with summary_writer.as_default():
+      summary_writer.image("batch of training data examples", images, max_outputs=100,step=0)
 
 ##############################################################################
 callbacks_list = [checkpoint_cb,tensorboard_cb]
