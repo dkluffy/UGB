@@ -1,6 +1,7 @@
 # local files
 v2_softmax/data/
 v3_gan/data/
+v4_softmax/data/
 *.h5
 *.ckpt
 # Byte-compiled / optimized / DLL files

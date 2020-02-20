@@ -1,0 +1,67 @@
+Saved checkpoint for epoch 20: /content/drive/My Drive/ugb/v4/ckpt-6
+Time for epoch 20 is 36.12 sec
+EPOCH-[21/100]- DISC LOSS:3.6307 (50/100) 
+EPOCH-[21/100]-  DISC LOSS:3.6235 ,val_loss:3.6223,acc:0.8125 , (99/100) 
+Time for epoch 21 is 35.93 sec
+EPOCH-[22/100]- DISC LOSS:3.6247 (50/100) 
+EPOCH-[22/100]-  DISC LOSS:3.6252 ,val_loss:3.6223,acc:0.8207 , (99/100) 
+Time for epoch 22 is 35.78 sec
+EPOCH-[23/100]- DISC LOSS:3.6223 (50/100) 
+EPOCH-[23/100]-  DISC LOSS:3.6225 ,val_loss:3.6247,acc:0.8281 , (99/100) 
+Time for epoch 23 is 35.72 sec
+EPOCH-[24/100]- DISC LOSS:3.6796 (50/100) 
+EPOCH-[24/100]-  DISC LOSS:3.6232 ,val_loss:3.6223,acc:0.8350 , (99/100) 
+Time for epoch 24 is 36.74 sec
+EPOCH-[25/100]- DISC LOSS:3.6230 (50/100) 
+EPOCH-[25/100]-  DISC LOSS:3.6223 ,val_loss:3.6844,acc:0.8389 , (99/100) 
+Saved checkpoint for epoch 25: /content/drive/My Drive/ugb/v4/ckpt-7
+Time for epoch 25 is 35.85 sec
+EPOCH-[26/100]- DISC LOSS:3.6463 (50/100) 
+EPOCH-[26/100]-  DISC LOSS:3.6228 ,val_loss:3.6232,acc:0.8449 , (99/100) 
+Time for epoch 26 is 35.83 sec
+EPOCH-[27/100]- DISC LOSS:3.6277 (50/100) 
+EPOCH-[27/100]-  DISC LOSS:3.6239 ,val_loss:3.6223,acc:0.8504 , (99/100) 
+Time for epoch 27 is 35.87 sec
+EPOCH-[28/100]- DISC LOSS:3.6231 (50/100) 
+EPOCH-[28/100]-  DISC LOSS:3.6243 ,val_loss:3.6223,acc:0.8556 , (99/100) 
+Time for epoch 28 is 35.94 sec
+EPOCH-[29/100]- DISC LOSS:3.6257 (50/100) 
+EPOCH-[29/100]-  DISC LOSS:3.6224 ,val_loss:3.6225,acc:0.8604 , (99/100) 
+Time for epoch 29 is 36.37 sec
+EPOCH-[30/100]- DISC LOSS:3.6267 (50/100) 
+EPOCH-[30/100]-  DISC LOSS:3.6229 ,val_loss:3.6223,acc:0.8649 , (99/100) 
+Saved checkpoint for epoch 30: /content/drive/My Drive/ugb/v4/ckpt-8
+Time for epoch 30 is 36.09 sec
+EPOCH-[31/100]- DISC LOSS:3.6228 (50/100) 
+EPOCH-[31/100]-  DISC LOSS:3.6233 ,val_loss:3.6223,acc:0.8691 , (99/100) 
+Time for epoch 31 is 36.19 sec
+EPOCH-[32/100]- DISC LOSS:3.6246 (50/100) 
+EPOCH-[32/100]-  DISC LOSS:3.6225 ,val_loss:3.6224,acc:0.8731 , (99/100) 
+Time for epoch 32 is 36.74 sec
+EPOCH-[33/100]- DISC LOSS:3.6237 (50/100) 
+EPOCH-[33/100]-  DISC LOSS:3.6230 ,val_loss:3.6223,acc:0.8768 , (99/100) 
+Time for epoch 33 is 36.12 sec
+EPOCH-[34/100]- DISC LOSS:3.6224 (50/100) 
+EPOCH-[34/100]-  DISC LOSS:3.6414 ,val_loss:3.6223,acc:0.8804 , (99/100) 
+Time for epoch 34 is 36.27 sec
+EPOCH-[35/100]- DISC LOSS:3.6237 (50/100) 
+EPOCH-[35/100]-  DISC LOSS:3.6223 ,val_loss:3.6225,acc:0.8837 , (99/100) 
+Saved checkpoint for epoch 35: /content/drive/My Drive/ugb/v4/ckpt-9
+Time for epoch 35 is 35.81 sec
+EPOCH-[36/100]-  DISC LOSS:3.6225 ,val_loss:3.6355,acc:0.8868 , (99/100) 
+Time for epoch 36 is 35.62 sec
+EPOCH-[37/100]- DISC LOSS:3.6229 (50/100) 
+EPOCH-[37/100]-  DISC LOSS:3.6223 ,val_loss:3.6223,acc:0.8898 , (99/100) 
+Time for epoch 37 is 36.00 sec
+EPOCH-[38/100]- DISC LOSS:3.6226 (50/100) 
+EPOCH-[38/100]-  DISC LOSS:3.6351 ,val_loss:3.6223,acc:0.8926 , (99/100) 
+Time for epoch 38 is 35.65 sec
+EPOCH-[39/100]- DISC LOSS:3.6227 (50/100) 
+EPOCH-[39/100]-  DISC LOSS:3.6224 ,val_loss:3.6226,acc:0.8953 , (99/100) 
+Time for epoch 39 is 35.67 sec
+EPOCH-[40/100]- DISC LOSS:3.6224 (50/100) 
+EPOCH-[40/100]-  DISC LOSS:3.6255 ,val_loss:3.6223,acc:0.8979 , (99/100) 
+Saved checkpoint for epoch 40: /content/drive/My Drive/ugb/v4/ckpt-10
+Time for epoch 40 is 35.83 sec
+
+
