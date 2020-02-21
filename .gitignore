@@ -4,6 +4,7 @@ v3_gan/data/
 v4_softmax/data/
 *.h5
 *.ckpt
+*.tsc
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
