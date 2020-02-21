@@ -338,10 +338,6 @@ for org,t,_ in X_train.take(1):
   timg = t[0]
 plt.imshow(org_img)
 
-discriminator([tf.expand_dims(org_img,0),tf.expand_dims(timg,0)],training=False)
-
-discriminator([tf.expand_dims(org_img,0),tf.expand_dims(org_img,0)],training=False)
-
 nimgs = []
 for o,nim,_ in X_train.take(10):
   nimgs.append(nim[0])
@@ -352,8 +348,6 @@ for im in nimgs:
   test_loss.append(discriminator([tf.expand_dims(org_img,0),tf.expand_dims(im,0)],training=False))
 print([t.numpy()[0,0] for t in test_loss],mse(tf.zeros_like(test_loss),test_loss))
 
-test_loss[tf.argmax(test_loss).numpy()[0,0]],tf.argmax(test_loss)
-
 nimgs2 = []
 for nim,_ in X_val.take(10):
   nimgs2.append(nim[0])
@@ -363,9 +357,9 @@ test_loss =[]
 for im in nimgs2:
   test_loss.append(discriminator([tf.expand_dims(org_img,0),tf.expand_dims(im,0)],training=False))
 print([t.numpy()[0,0] for t in test_loss],mse(tf.zeros_like(test_loss),test_loss))
-test_loss[tf.argmax(test_loss).numpy()[0,0]],tf.argmax(test_loss)
 
 """# eveluat"""
 
+# Commented out IPython magic to ensure Python compatibility.
 # %load_ext tensorboard
 # %tensorboard --bind_all  --logdir=/content/drive/My\ Drive/ugb/v8_fit --port=6007

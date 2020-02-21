@@ -98,8 +98,8 @@ def create_ds_temp(images,lables,buffer_size=128):
     return img_lab_ds.shuffle(buffer_size=buffer_size).repeat()
 
 def create_dataset_in_mem(images,lables,gan=False,buffer_size=128):
-    ratio = bcf.RESCAL_RATIO
-    m_size=bcf.MID_SIZE
+    ratio = baseconf.RESCAL_RATIO
+    m_size=baseconf.MID_SIZE
     
     copys_len = len(ratio)
     
